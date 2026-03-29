@@ -1,1 +1,22 @@
+-- Retrieve All Books in a Specific Category:
+
+
+SELECT book_title
+ FROM Library.books
+where category= 'classic';
+
+
+-- Find Total Rental Income by Category:
+
+SELECT 
+    b.category,
+    SUM(b.rental_price),
+    COUNT(*)
+FROM 
+library.issued_status as ist
+JOIN
+library.books as b
+ON b.isbn = ist.issued_book_isbn
+GROUP BY 1
+
 
