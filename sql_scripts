@@ -41,3 +41,15 @@ JOIN
 employees as e2
 ON e2.emp_id = b.manager_id
 
+
+-- Create a Table of Books with Rental Price Above a Certain Threshold:
+create table expensive_books as 
+select *
+from books
+where rental_price>7.00;
+
+--Retrieve the List of Books Not Yet Returned
+
+select *  from issued_status as ist
+left join return_status as rs on rs.issued_id=ist.issued_id
+where rs.return_id is null;
