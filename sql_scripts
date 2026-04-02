@@ -80,6 +80,21 @@ order by 1;
 -- Task 14: Update Book Status on Return
 Write a query to update the status of books in the books table to "Yes" when they are returned (based on entries in the return_status table).
 
+update books b
+set b.status =
+ case when exists(
+ select 1
+ from issued_status i
+ left join return_status r on r.issued_id=i.issued_id
+ where i.issued_book_isbn=b.isbn
+ and r.return_date is null
+ ) then 'No'
+ else 'Yes'
+ end;
+
+-- Task 15: Branch Performance Report
+Create a query that generates a performance report for each branch, showing the number of books issued, the number of books returned, and the total revenue generated from book rentals.
+
 
 
 
