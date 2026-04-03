@@ -114,9 +114,17 @@ join books e on e.isbn= c.issued_book_isbn
 group by c.branch_id,c.manager_id;
 
 
+-- Use the CREATE TABLE AS (CTAS) statement to create a new table active_members
+containing members who have issued at least one book in the last 2 months.
 
-
-
+Create table CTAS
+(
+select issued_member_id, count(issued_book_isbn)as No_of_books
+from issued_status
+where issued_date >= date_sub('2024-03-05', interval 2 month) 
+group by issued_member_id
+having count(issued_book_isbn) >=1
+order by 1);
 
 
 
