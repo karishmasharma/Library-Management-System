@@ -93,7 +93,37 @@ set b.status =
  end;
 
 -- Task 15: Branch Performance Report
-Create a query that generates a performance report for each branch, showing the number of books issued, the number of books returned, and the total revenue generated from book rentals.
+Create a query that generates a performance report for each branch, showing the number of books issued, the number of books returned, 
+and the total revenue generated from book rentals.
+
+
+with cte as (
+select 
+    b.branch_id,i.issued_book_isbn,
+    count(i.issued_book_name) as No_of_books_issued,
+    count(r.return_id) as no_of_return_books
+    from branch b
+    left join employees e on e.branch_id = b.branch_id
+    left join issued_status i on i.issued_emp_id = e.emp_id
+    left join return_status r on r.issued_id = i.issued_id
+group by b.branch_id, i.issued_book_isbn) 
+
+select c.branch_id, sum(c.No_of_books_issued* e.rental_price) as total_revenue, sum(No_of_books_issued) as Total_books,sum(no_of_return_books)as Total_return_books
+from cte c
+join books e on e.isbn= c.issued_book_isbn
+group by c.branch_id;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
