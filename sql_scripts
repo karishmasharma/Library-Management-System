@@ -117,14 +117,50 @@ group by c.branch_id,c.manager_id;
 -- Use the CREATE TABLE AS (CTAS) statement to create a new table active_members
 containing members who have issued at least one book in the last 2 months.
 
-Create table CTAS
+
+create table Active_Members
 (
-select issued_member_id, count(issued_book_isbn)as No_of_books
-from issued_status
-where issued_date >= date_sub('2024-03-05', interval 2 month) 
-group by issued_member_id
-having count(issued_book_isbn) >=1
-order by 1);
+select m.*,i.no_of_books
+from members m
+join
+ (select issued_member_id, count(issued_book_isbn) as no_of_books
+ from issued_status
+ where issued_date>= '2024-03-13'- interval 2 month
+ group by issued_member_id
+ order by 1) i
+ on i.issued_member_id= m.member_id);
+
+select * from Active_members;
+
+-- Find Employees with the Most Book Issues Processed
+Write a query to find the top 3 employees who have processed the most book issues. 
+Display the employee name, number of books processed, and their branch.
+
+
+SELECT 
+    e.emp_name,
+    COUNT(ist.issued_book_isbn) AS no_of_books,
+    b.branch_address
+FROM issued_status ist
+JOIN employees e
+    ON ist.issued_emp_id = e.emp_id
+JOIN branch b
+    ON e.branch_id = b.branch_id
+GROUP BY 
+    e.emp_id,
+    e.emp_name,
+    b.branch_address
+ORDER BY no_of_books DESC
+LIMIT 3;
+        
+
+-- Identify Members Issuing High-Risk Books
+Write a query to identify members who have issued books more than twice
+with the status "damaged" in the books table. Display the member name, book title, and the number of times they've issued damaged books.
+
+
+
+
 
 
 
